@@ -1,12 +1,3 @@
-
-
-
-// storing a reference to the canvas 
-var canvas = document.getElementById("myCanvas");
-
-// stores all 2d rendering
-var ctx = canvas.getContext("2d");
-
 //this example prints a red square on the canvas
 
 
@@ -38,7 +29,3 @@ ctx.rect(160,10,100,40);
 ctx.strokeStyle = "rgba(0,0,255,0.5)";
 ctx.stroke();
 ctx.closePath();
-
-// Technically, we will be painting the ball on the screen, clearing it and then painting it again in a slightly 
-// different position every frame to make the impression of movement — just like how movement works with the movies.
-
