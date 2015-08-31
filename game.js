@@ -49,8 +49,8 @@ for(c = 0; c < brickColumnCount;c++){
   bricks[c] = [];
 
   for(r = 0; r < brickRowCount; r++){
-    bricks[c][r] = {x: 0, y:0};
-  }
+    bricks[c][r] = {x: 0, y:0, status: 1}; // status --> aids in bricks dissapearing
+  } // if status = 0, don't repaint this brick
 }
 
 
@@ -86,6 +86,7 @@ function draw()
    drawBricks();
 
    drawPaddle();
+   collisionDetection();
 
   /** COLLISION DETECTION */
    // ball bouncing off top edge
@@ -168,16 +169,19 @@ function drawBricks()
   {
     for(r=0; r < brickRowCount; r++)
     {
-    // Calculation to set x/y coords for each brick (so they won't stack on eachother)
-    var brickX = (r*(brickWidth+brickPadding)) + brickOffsetLeft;
-    var brickY = (c*(brickHeight+brickPadding)) + brickOffsetTop;
-      bricks[c][r].x = brickX;
-      bricks[c][r].y = brickY;
-      ctx.beginPath();
-      ctx.rect(brickX,brickY,brickWidth,brickHeight);
-      ctx.fillStyle = "#0095DD";
-      ctx.fill();
-      ctx.closePath();
+      if(bricks[c][r].status == 1) //checks to see if brick hasn't been hit (1), rewrite
+      {
+        // Calculation to set x/y coords for each brick (so they won't stack on eachother)
+        var brickX = (r*(brickWidth+brickPadding)) + brickOffsetLeft;
+        var brickY = (c*(brickHeight+brickPadding)) + brickOffsetTop;
+          bricks[c][r].x = brickX;
+          bricks[c][r].y = brickY;
+          ctx.beginPath();
+          ctx.rect(brickX,brickY,brickWidth,brickHeight);
+          ctx.fillStyle = "#0095DD";
+          ctx.fill();
+          ctx.closePath(); 
+      }
     }
   }
 }
@@ -227,6 +231,34 @@ function keyUpHandler(e)  // e --> event
   else if(e.keyCode == 37)
   {
     leftPressed = false;
+  }
+}
+
+/*
+For the center of the ball to be inside the brick, all four of the following statements need to be true:
+
+The x position of the ball is greater than the x position of the brick.
+The x position of the ball is lesser than the x position of the brick minus its width.
+The y position of the ball is greater than the y position of the brick.
+The y position of the ball is less than the y position of the brick minus its width.
+*/
+
+function collisionDetection()
+{
+  for(c=0; c < brickColumnCount; c++)
+  {
+    for(r = 0; r < brickRowCount; r++)
+    {
+      var b = bricks[c][r];
+      if(b.status == 1)
+      {
+        if(x > b.x && x < b.x +brickWidth && y > b.y && y < b.y+brickWidth)
+        {
+          dy = -dy; //change dir of ball
+          b.status = 0;  // mark as a hit
+        } 
+      }
+    }
   }
 }
 
