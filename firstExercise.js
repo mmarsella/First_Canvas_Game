@@ -29,3 +29,9 @@ ctx.rect(160,10,100,40);
 ctx.strokeStyle = "rgba(0,0,255,0.5)";
 ctx.stroke();
 ctx.closePath();
+
+
+
+/** GAME NOTES */
+
+// 8/31 --> Why don't I need to use window.onLoad for this game??
