@@ -20,6 +20,7 @@ var color = "#0095DD";
 var paddleHeight = 10;
 var paddleWidth = 75;
 var paddleX = (canvas.width-paddleWidth)/2;
+console.log(paddleX);
 
 /** PADLLE CONTROLS */
 
@@ -41,6 +42,7 @@ var leftPressed = false;
 // define a starting point at the bottom center part of the Canvas:
 var x = canvas.width/2;
 var y = canvas.height-30;
+console.log("Height:" + canvas.height);
  // add a small value to x and y after every frame has been drawn to make it appear that the ball is moving.
 var dx = -1;
 var dy = -2;
@@ -67,12 +69,25 @@ function draw()
      dy = -dy;
      color = randomColor();
    }
-   //ball bouncing off bottom edge
-   if(y + dy > canvas.height - ballRadius){
-    dy = -dy;
-    color = randomColor();
 
+   /** GAME OVER */
+
+   //ball bouncing off bottom edge
+   else if(y + dy > canvas.height-ballRadius)
+   {
+      if(x > paddleX && x < paddleX + paddleWidth)
+      {
+        console.log("Paddle X: " + paddleX);
+        console.log("paddleX + paddleWidth: " + (paddleX + paddleWidth));
+        dy = -dy;
+      }
+      else
+     {
+      alert("GAME OVER");
+      document.location.reload();
+     }
    }
+
 
   // ballRadius replaces 0
   if(x + dx < ballRadius || x+dx > canvas.width - ballRadius){
@@ -97,8 +112,6 @@ function draw()
 
 }
 
-
-
 function drawBall()
 {
    // drawing code
@@ -109,9 +122,6 @@ function drawBall()
   ctx.fill();
   ctx.closePath();
 }
-
-
-
 
 
 function drawPaddle()
@@ -151,13 +161,10 @@ function keyDownHandler(e)
   if(e.keyCode == 39)  // keyCode 39 is the right cursor
   {
     rightPressed = true;
-    console.log(e.keyCode);
   }
   else if(e.keyCode == 37)  // keycode 37 is left
   {
     leftPressed = true;
-    console.log(e.keyCode);
-
   }
 }
 
