@@ -11,6 +11,7 @@ var canvas = document.getElementById("myCanvas");
 // stores all 2d rendering
 var ctx = canvas.getContext("2d");
 
+canvas.style.background = "url('images/8BitBeach.jpg') 480px 490px";
 
 //Color of the ball
 var color = "#0095DD";
