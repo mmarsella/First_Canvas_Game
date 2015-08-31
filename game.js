@@ -1,4 +1,7 @@
+/** This game was made by following the instructions of
+ the MDN GameDev docs */
 
+// https://developer.mozilla.org/en-US/docs/Games/Workflows/2D_Breakout_game_pure_JavaScript/Move_the_ball
 
 
 // storing a reference to the canvas 
@@ -7,38 +10,54 @@ var canvas = document.getElementById("myCanvas");
 // stores all 2d rendering
 var ctx = canvas.getContext("2d");
 
-//this example prints a red square on the canvas
 
-
-// All the instructions are between the beginPath() and closePath() methods.
-ctx.beginPath();
-
-// .rect = method for creating rectangles.
-// -- first 2 values specify the x/y coordinates for the top left corner of the triangle.
-// -- 2nd 2 values specify width/height. 
-ctx.rect(20,100,50,50);  //20 px from left and 40 pixels from top of the screen. 50x50
-ctx.fillStyle = "#FF0000";  //stores a color that will be used by fill()
-ctx.fill();  //paints the square
-ctx.closePath();
-
-
-//prints out a circle
-ctx.beginPath();
-ctx.arc(240, 160, 50, 0, Math.PI*2, false);
-ctx.fillStyle = "magenta";
-ctx.fill();
-ctx.closePath();
-
-//We can use stroke() to only colour the outer stroke.
-
-ctx.beginPath();
-ctx.rect(160,10,100,40);
-//using the rgb color value gives a transparent alpha channel
-// vs. using just "blue" -- which is solid.
-ctx.strokeStyle = "rgba(0,0,255,0.5)";
-ctx.stroke();
-ctx.closePath();
 
 // Technically, we will be painting the ball on the screen, clearing it and then painting it again in a slightly 
 // different position every frame to make the impression of movement — just like how movement works with the movies.
+
+/** DEFINING A DRAWING LOOP */
+
+
+// You can run a function over and over again using 
+// a JavaScript timing function such as setInterval() 
+// or requestAnimationFrame().
+
+// define a starting point at the bottom center part of the Canvas:
+var x = canvas.width/2;
+var y = canvas.height-30;
+ // add a small value to x and y after every frame has been drawn to make it appear that the ball is moving.
+var dx = -1;
+var dy = -2;
+
+function draw()
+{
+  /** MAKING IT MOVE */
+  // Clears the screen
+  // 4 params: x/y of bottom right corners of a rect. --> whole area will be cleared of any content painted
+  ctx.clearRect(0,0, canvas.width, canvas.height);
+ 
+ drawBall();
+
+  // update x and y with our dx and dy variable on every frame
+  x += dx;
+  y += dy;
+}
+
+function drawBall()
+{
+   // drawing code
+  ctx.beginPath();
+  //why the Math.PI * 2???
+  ctx.arc(x,y,10,0, Math.PI*2);
+  ctx.fillStyle = "#0095DD";
+  ctx.fill();
+  ctx.closePath();
+}
+
+
+setInterval(draw, 10);  //calls draw() every 10ms
+
+
+
+
 
