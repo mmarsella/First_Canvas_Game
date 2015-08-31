@@ -57,6 +57,8 @@ for(c = 0; c < brickColumnCount;c++){
 
 var score = 0;
 
+var lives = 3;
+
 
 
 
@@ -75,6 +77,8 @@ var score = 0;
 var x = canvas.width/2;
 var y = canvas.height-30;
 console.log("Height:" + canvas.height);
+
+
  // add a small value to x and y after every frame has been drawn to make it appear that the ball is moving.
 var dx = -1;
 var dy = -2;
@@ -92,7 +96,7 @@ function draw()
    drawBricks();
    drawPaddle();
    drawScore();
-   collisionDetection();
+   drawLives();
 
   /** COLLISION DETECTION */
    // ball bouncing off top edge
@@ -107,23 +111,33 @@ function draw()
    /** GAME OVER */
 
    //ball bouncing off bottom edge
-   else if(y + dy > canvas.height-ballRadius)
+   else if(y+ballRadius > canvas.height-ballRadius)
    {
       if(x > paddleX && x < paddleX + paddleWidth)
       {
-        console.log("Paddle X: " + paddleX);
-        console.log("paddleX + paddleWidth: " + (paddleX + paddleWidth));
+      
         dy = -dy;
         ballSpeed--;
         console.log(ballSpeed);
       }
       else
      {
-      alert("GAME OVER");
-      document.location.reload();
+        lives--;
+        if(!lives)
+        {
+          alert("GAME OVER");
+          document.location.reload();
+        }
+        else
+        {
+          x = canvas.width/2;
+          y = canvas.height-30;
+          dx = 2;
+          dy = -2;
+          paddleX = (canvas.width-paddleWidth)/2;
+        }
      }
    }
-
 
   // ballRadius replaces 0
   if(x + dx < ballRadius || x+dx > canvas.width - ballRadius){
@@ -145,7 +159,16 @@ function draw()
   {
     paddleX -= 7;  // moves 7 pixels to the left 
   }
+  
+  //Detects if ball hits a brick
+  collisionDetection();
 
+
+  requestAnimationFrame(draw); //replaces setInterval(draw,10) outside of the function
+  /**
+  Instead of the fixed 10ms frame rate, framerate is det. by browser.  It will sync the 
+  framerate accordingly and render the shapes only when needed.  
+  Produces a more efficient/smoother animation loop than setInterval */
 }
 
 function drawBall()
@@ -204,7 +227,9 @@ var color = "rgb("+randomOne+","+randomTwo+","+randomThree+")";
 return color;
 }
 
-setInterval(draw, ballSpeed);  //calls draw() every 10ms
+draw();
+
+//setInterval(draw, ballSpeed);  //calls draw() every 10ms
 
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
@@ -221,14 +246,12 @@ function mouseMoveHandler(e)
   }
 }
 
-
 /** Allow user to control paddle */
 
 //Add event listeners for the paddle
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-
 
 // when the keys are pressed, set to true
 function keyDownHandler(e)
@@ -274,7 +297,12 @@ function collisionDetection()
       var b = bricks[c][r];
       if(b.status == 1)
       {
-        if(x > b.x && x < b.x +brickWidth && y > b.y && y < b.y+brickWidth)
+        // x--> current pos. of ball
+        // x + ballRadius > b.x compares right side of ball w/ left side of box
+        // x - ballRadius < b.x + brickWidth compares right side of ball w/ right side of box
+        // y + ballRadius > b.y compares bottom of ball with top side of box
+        // y - ballRadius < b.y + brickHeight compares top of ball, bottom of box
+        if(x + ballRadius > b.x && x - ballRadius < b.x +brickWidth && y + ballRadius > b.y && y - ballRadius < b.y + brickHeight)
         {
           dy = -dy; //change dir of ball
           b.status = 0;  // mark as a hit
@@ -300,7 +328,12 @@ function drawScore()
   ctx.fillText("Score: " + score, 8, 20);  //.fillText(text, coordX,coordY)
 }
 
-
+function drawLives()
+{
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Lives: " + lives, canvas.width-65, 20);
+}
 
 
 
