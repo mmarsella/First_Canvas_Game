@@ -53,6 +53,12 @@ for(c = 0; c < brickColumnCount;c++){
   } // if status = 0, don't repaint this brick
 }
 
+/** SCORE */
+
+var score = 0;
+
+
+
 
 
 // Technically, we will be painting the ball on the screen, clearing it and then painting it again in a slightly 
@@ -84,8 +90,8 @@ function draw()
    
    drawBall();
    drawBricks();
-
    drawPaddle();
+   drawScore();
    collisionDetection();
 
   /** COLLISION DETECTION */
@@ -256,10 +262,26 @@ function collisionDetection()
         {
           dy = -dy; //change dir of ball
           b.status = 0;  // mark as a hit
+          score++;
+
+          // Checks for a win
+          if(score == brickRowCount * brickColumnCount)
+          {
+            alert("YOU WIN!!!!");
+            document.location.reload(); // reloads page and starts game again once alert button is clicked
+          }
         } 
       }
     }
   }
+}
+
+
+function drawScore()
+{
+  ctx.font = "16px Arial"; // sets size and font type
+  ctx.fillStyle = "#0095DD"; // color of text
+  ctx.fillText("Score: " + score, 8, 20);  //.fillText(text, coordX,coordY)
 }
 
 
