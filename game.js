@@ -7,6 +7,7 @@
 
 // storing a reference to the canvas 
 var canvas = document.getElementById("myCanvas");
+var audio = document.getElementById("audio");
 
 // stores all 2d rendering
 var ctx = canvas.getContext("2d");
@@ -116,7 +117,8 @@ function draw()
    {
       if(x > paddleX && x < paddleX + paddleWidth)
       {
-      
+        audio.setAttribute("src","sound/paddle.wav"); //plays fx for paddle-hit
+        audio.play();
         dy = -dy;
         ballSpeed--;
         console.log(ballSpeed);
@@ -126,6 +128,8 @@ function draw()
         lives--;
         if(!lives)
         {
+          audio.setAttribute("src","sound/lose.wav"); //plays fx for paddle-hit
+          audio.play();
           alert("GAME OVER");
           document.location.reload();
         }
@@ -305,6 +309,8 @@ function collisionDetection()
         // y - ballRadius < b.y + brickHeight compares top of ball, bottom of box
         if(x + ballRadius > b.x && x - ballRadius < b.x +brickWidth && y + ballRadius > b.y && y - ballRadius < b.y + brickHeight)
         {
+          audio.setAttribute("src","sound/hit.wav"); //plays fx for paddle-hit
+          audio.play();
           dy = -dy; //change dir of ball
           b.status = 0;  // mark as a hit
           score++;
@@ -312,6 +318,8 @@ function collisionDetection()
           // Checks for a win
           if(score == brickRowCount * brickColumnCount)
           {
+            audio.setAttribute("src","sound/success.wav"); //plays fx for paddle-hit
+            audio.play();
             alert("YOU WIN!!!!");
             document.location.reload(); // reloads page and starts game again once alert button is clicked
           }
