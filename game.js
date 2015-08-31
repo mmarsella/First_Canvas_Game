@@ -27,6 +27,32 @@ console.log(paddleX);
 var rightPressed = false;
 var leftPressed = false;
 
+var ballSpeed = 10;
+
+/** BRICK VARIABLES */
+
+var brickRowCount = 4;
+var brickColumnCount = 5;
+var brickWidth = 75;
+var brickHeight = 20;
+var brickPadding = 10;
+var brickOffsetTop = 30;
+var brickOffsetLeft = 75;
+
+/** Holds all the bricks in a 2-d array
+  each brick will create an object with x/y coords */
+
+// Loops thru the rows and columns and create new bricks
+var bricks = [];
+
+for(c = 0; c < brickColumnCount;c++){
+  bricks[c] = [];
+
+  for(r = 0; r < brickRowCount; r++){
+    bricks[c][r] = {x: 0, y:0};
+  }
+}
+
 
 
 // Technically, we will be painting the ball on the screen, clearing it and then painting it again in a slightly 
@@ -57,6 +83,7 @@ function draw()
     ctx.clearRect(0,0, canvas.width, canvas.height);
    
    drawBall();
+   drawBricks();
 
    drawPaddle();
 
@@ -80,6 +107,8 @@ function draw()
         console.log("Paddle X: " + paddleX);
         console.log("paddleX + paddleWidth: " + (paddleX + paddleWidth));
         dy = -dy;
+        ballSpeed--;
+        console.log(ballSpeed);
       }
       else
      {
@@ -128,9 +157,29 @@ function drawPaddle()
 {
   ctx.beginPath();
   ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
-  ctx.fillStyle = "#0095DD";
+  ctx.fillStyle = "green";
   ctx.fill();
   ctx.closePath();
+}
+
+function drawBricks()
+{
+  for(c = 0; c < brickColumnCount; c++)
+  {
+    for(r=0; r < brickRowCount; r++)
+    {
+    // Calculation to set x/y coords for each brick (so they won't stack on eachother)
+    var brickX = (r*(brickWidth+brickPadding)) + brickOffsetLeft;
+    var brickY = (c*(brickHeight+brickPadding)) + brickOffsetTop;
+      bricks[c][r].x = brickX;
+      bricks[c][r].y = brickY;
+      ctx.beginPath();
+      ctx.rect(brickX,brickY,brickWidth,brickHeight);
+      ctx.fillStyle = "#0095DD";
+      ctx.fill();
+      ctx.closePath();
+    }
+  }
 }
 
 // to gen colors for ball hits
@@ -145,7 +194,7 @@ var color = "rgb("+randomOne+","+randomTwo+","+randomThree+")";
 return color;
 }
 
-setInterval(draw, 10);  //calls draw() every 10ms
+setInterval(draw, ballSpeed);  //calls draw() every 10ms
 
 /** Allow user to control paddle */
 
