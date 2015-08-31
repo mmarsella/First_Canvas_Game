@@ -206,6 +206,22 @@ return color;
 
 setInterval(draw, ballSpeed);  //calls draw() every 10ms
 
+document.addEventListener("mousemove", mouseMoveHandler, false);
+
+
+// Adding mouse functionality
+function mouseMoveHandler(e)
+{
+  // e.clientX --> Horizonal mouse position
+  // canvas.offsetLeft --> dist b/w left edge of canvas and left edge of viewport
+  var relativeX = e.clientX - canvas.offsetLeft;
+  if(relativeX > 0 && relativeX < canvas.width)
+  {
+    paddleX = relativeX - paddleWidth/2;
+  }
+}
+
+
 /** Allow user to control paddle */
 
 //Add event listeners for the paddle
