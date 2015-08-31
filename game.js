@@ -3,8 +3,6 @@
 
 // https://developer.mozilla.org/en-US/docs/Games/Workflows/2D_Breakout_game_pure_JavaScript/Move_the_ball
 
-
-
 // storing a reference to the canvas 
 var canvas = document.getElementById("myCanvas");
 var audio = document.getElementById("audio");
@@ -33,8 +31,8 @@ var ballSpeed = 10;
 
 /** BRICK VARIABLES */
 
-var brickRowCount = 4;
-var brickColumnCount = 5;
+var brickRowCount = 3;
+var brickColumnCount = 3;
 var brickWidth = 75;
 var brickHeight = 20;
 var brickPadding = 10;
@@ -130,8 +128,9 @@ function draw()
         {
           audio.setAttribute("src","sound/lose.wav"); //plays fx for paddle-hit
           audio.play();
-          alert("GAME OVER");
-          document.location.reload();
+          setInterval(alert("GAME OVER"),500);
+          
+          //document.location.reload();
         }
         else
         {
@@ -187,7 +186,6 @@ function drawBall()
   ctx.closePath();
 }
 
-
 function drawPaddle()
 {
   ctx.beginPath();
@@ -238,7 +236,6 @@ draw();
 
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
-
 // Adding mouse functionality
 function mouseMoveHandler(e)
 {
@@ -250,11 +247,9 @@ function mouseMoveHandler(e)
     paddleX = relativeX - paddleWidth/2;
   }
 }
-
 /** Allow user to control paddle */
 
 //Add event listeners for the paddle
-
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
