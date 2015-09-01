@@ -6,6 +6,7 @@
 // storing a reference to the canvas 
 var canvas = document.getElementById("myCanvas");
 var audio = document.getElementById("audio");
+var arcadeLoop = document.getElementById("arcadeLoop");
 
 // stores all 2d rendering
 var ctx = canvas.getContext("2d");
@@ -59,9 +60,10 @@ var score = 0;
 
 var lives = 1;
 
-
 //Control requestAnimFrame
 var end = false;
+
+
 
 //Reset button
 $("#button").on("click", function(){
@@ -69,9 +71,6 @@ $("#button").on("click", function(){
 reset();
 console.log("RESET");
 });
-
-
-
 
 
 // Technically, we will be painting the ball on the screen, clearing it and then painting it again in a slightly 
@@ -98,6 +97,12 @@ var ballRadius = 10;
 
 function draw()
 {
+
+    if(!end)
+    {
+      arcadeLoop.play();
+    }
+
     /** MAKING IT MOVE */
     // Clears the screen
     // 4 params: x/y of bottom right corners of a rect. --> whole area will be cleared of any content painted
@@ -137,6 +142,7 @@ function draw()
         lives--;
         if(!lives)
         {
+          arcadeLoop.pause();
           audio.setAttribute("src","sound/lose.wav"); //plays fx for paddle-hit
           audio.play();
           end = true;
@@ -327,6 +333,7 @@ function collisionDetection()
           // Checks for a win
           if(score == brickRowCount * brickColumnCount)
           {
+            arcadeLoop.pause();
             audio.setAttribute("src","sound/success.wav"); //plays fx for paddle-hit
             audio.play();
             end = true;
