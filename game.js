@@ -31,13 +31,13 @@ var ballSpeed = 10;
 
 /** BRICK VARIABLES */
 
-var brickRowCount = 3;
-var brickColumnCount = 3;
+var brickRowCount = 2;
+var brickColumnCount = 2;
 var brickWidth = 75;
 var brickHeight = 20;
 var brickPadding = 10;
-var brickOffsetTop = 30;
-var brickOffsetLeft = 75;
+var brickOffsetTop = 90;
+var brickOffsetLeft = 155;
 
 /** Holds all the bricks in a 2-d array
   each brick will create an object with x/y coords */
@@ -57,7 +57,18 @@ for(c = 0; c < brickColumnCount;c++){
 
 var score = 0;
 
-var lives = 3;
+var lives = 1;
+
+
+//Control requestAnimFrame
+var end = false;
+
+//Reset button
+$("#button").on("click", function(){
+
+reset();
+console.log("RESET");
+});
 
 
 
@@ -128,9 +139,8 @@ function draw()
         {
           audio.setAttribute("src","sound/lose.wav"); //plays fx for paddle-hit
           audio.play();
-          setInterval(alert("GAME OVER"),500);
-          
-          //document.location.reload();
+          end = true;
+          lose();
         }
         else
         {
@@ -168,7 +178,11 @@ function draw()
   collisionDetection();
 
 
+  if(!end)
+  {
   requestAnimationFrame(draw); //replaces setInterval(draw,10) outside of the function
+    
+  }
   /**
   Instead of the fixed 10ms frame rate, framerate is det. by browser.  It will sync the 
   framerate accordingly and render the shapes only when needed.  
@@ -315,13 +329,28 @@ function collisionDetection()
           {
             audio.setAttribute("src","sound/success.wav"); //plays fx for paddle-hit
             audio.play();
-            alert("YOU WIN!!!!");
-            document.location.reload(); // reloads page and starts game again once alert button is clicked
+            end = true;
+            win();
+            //document.location.reload(); // reloads page and starts game again once alert button is clicked
           }
         } 
       }
     }
   }
+}
+
+function win()
+{
+  ctx.font = "30px Arial";
+  ctx.fillStyle = "white";
+  ctx.fillText("YOU WIN!!!", 160, 100);
+}
+
+function lose()
+{
+  ctx.font = "30px Arial";
+  ctx.fillStyle = "white";
+  ctx.fillText("YOU LOSE", 160, 100);
 }
 
 
@@ -337,6 +366,13 @@ function drawLives()
   ctx.font = "16px Arial";
   ctx.fillStyle = "#0095DD";
   ctx.fillText("Lives: " + lives, canvas.width-65, 20);
+}
+
+function reset()
+{
+  console.log("RESET");
+  end = false;
+  document.location.reload();  // reloads the page
 }
 
 
